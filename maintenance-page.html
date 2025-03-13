@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSRTC Integrated Platform - Maintenance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background-color: #0a4275;
+            color: white;
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-item:hover {
+            background-color: #0d5494;
+        }
+        
+        .nav-item.active {
+            background-color: #0d5494;
+            border-left: 4px solid #fff;
+        }
+        
+        .nav-icon {
+            margin-right: 10px;
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .nav-text {
+            font-size: 14px;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-name {
+            margin-right: 15px;
+            font-weight: 500;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #0a4275;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .status-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .status-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .status-card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .card-routine {
+            background-color: #e6f7ff;
+            color: #0a84ff;
+        }
+        
+        .card-pending {
+            background-color: #fff3e0;
+            color: #ff9800;
+        }
+        
+        .card-overdue {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+        
+        .card-completed {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .status-card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .status-card-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .maintenance-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background-color: #e8edf1;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background-color: #0a4275;
+            color: white;
+        }
+        
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .filter-button {
+            background-color: #0a4275;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .maintenance-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .maintenance-table th, .maintenance-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .maintenance-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .maintenance-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .maintenance-table td {
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-routine {
+            background-color: #e6f7ff;
+            color: #0a84ff;
+        }
+        
+        .badge-pending {
+            background-color: #fff3e0;
+            color: #ff9800;
+        }
+        
+        .badge-overdue {
+            background-color: #ffebee;
+            color: #f44336;
+        }
+        
+        .badge-completed {
+            background-color: #e8f5e9;
+            color: #4caf50;
+        }
+        
+        .action-button {
+            padding: 6px 12px;
+            border-radius: 5px;
+            background-color: #0a4275;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .action-button:hover {
+            background-color: #0d5494;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .page-button {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .page-button.active {
+            background-color: #0a4275;
+            color: white;
+            border-color: #0a4275;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="/api/placeholder/40/40" alt="GSRTC Logo" class="logo">
+            <div class="logo-text">GSRTC Platform</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📊</div>
+            <div class="nav-text">Dashboard</div>
+        </div>
+        <div class="nav-item active">
+            <div class="nav-icon">🔧</div>
+            <div class="nav-text">Maintenance</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🚌</div>
+            <div class="nav-text">Available Buses</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🚨</div>
+            <div class="nav-text">Emergency</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">💰</div>
+            <div class="nav-text">Accounts</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🔨</div>
+            <div class="nav-text">Workshop</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📦</div>
+            <div class="nav-text">Stores</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🛒</div>
+            <div class="nav-text">Purchase</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🚦</div>
+            <div class="nav-text">Traffic</div>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="header">
+            <div class="page-title">Maintenance Management</div>
+            <div class="user-info">
+                <div class="user-name">Admin User</div>
+                <div class="user-avatar">A</div>
+            </div>
+        </div>
+        
+        <div class="status-cards">
+            <div class="status-card">
+                <div class="status-card-icon card-routine">🔄</div>
+                <div class="status-card-value">38</div>
+                <div class="status-card-label">Routine Maintenance</div>
+            </div>
+            <div class="status-card">
+                <div class="status-card-icon card-pending">⏳</div>
+                <div class="status-card-value">24</div>
+                <div class="status-card-label">Pending Repairs</div>
+            </div>
+            <div class="status-card">
+                <div class="status-card-icon card-overdue">⚠️</div>
+                <div class="status-card-value">12</div>
+                <div class="status-card-label">Overdue</div>
+            </div>
+            <div class="status-card">
+                <div class="status-card-icon card-completed">✅</div>
+                <div class="status-card-value">167</div>
+                <div class="status-card-label">Completed This Month</div>
+            </div>
+        </div>
+        
+        <div class="maintenance-tabs">
+            <div class="tab active">All Maintenance</div>
+            <div class="tab">Scheduled</div>
+            <div class="tab">In Progress</div>
+            <div class="

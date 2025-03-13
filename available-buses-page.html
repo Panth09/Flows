@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSRTC - Available Buses</title>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .page-title {
+            margin: 20px 0;
+            color: var(--dark-color);
+        }
+        
+        .filter-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .bus-list {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .bus-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .bus-table th,
+        .bus-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .bus-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .bus-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-available {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-maintenance {
+            background-color: #fff3cd;
+            color: #664d03;
+        }
+        
+        .status-route {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            list-style: none;
+        }
+        
+        .pagination li {
+            margin: 0 5px;
+        }
+        
+        .pagination a {
+            display: block;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .pagination a.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .pagination a:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+
+        .map-view {
+            height: 400px;
+            margin-top: 20px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .filter-group {
+                min-width: 100%;
+            }
+            
+            .button-group {
+                justify-content: space-between;
+                width: 100%;
+            }
+            
+            .bus-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">GSRTC</div>
+                <ul class="nav-links">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Available Buses</a></li>
+                    <li><a href="#">Emergency</a></li>
+                    <li><a href="#">Finance</a></li>
+                    <li><a href="#">Workshop</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Available Buses</h1>
+        
+        <div class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="depot">Depot</label>
+                    <select id="depot">
+                        <option value="">All Depots</option>
+                        <option value="ahmedabad">Ahmedabad</option>
+                        <option value="vadodara">Vadodara</option>
+                        <option value="surat">Surat</option>
+                        <option value="rajkot">Rajkot</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="bus-type">Bus Type</label>
+                    <select id="bus-type">
+                        <option value="">All Types</option>
+                        <option value="ordinary">Ordinary</option>
+                        <option value="express">Express</option>
+                        <option value="luxury">Luxury</option>
+                        <option value="sleeper">Sleeper</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="maintenance">In Maintenance</option>
+                        <option value="route">On Route</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label for="bus-number">Bus Number</label>
+                    <input type="text" id="bus-number" placeholder="Enter bus number">
+                </div>
+                <div class="filter-group">
+                    <label for="capacity">Minimum Capacity</label>
+                    <input type="number" id="capacity" placeholder="Enter minimum capacity">
+                </div>
+                <div class="filter-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date">
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-secondary" id="reset-btn">Reset</button>
+                <button class="btn btn-primary" id="search-btn">Search</button>
+            </div>
+        </div>
+        
+        <div class="view-toggle button-group" style="margin-bottom: 15px;">
+            <button class="btn btn-primary" id="list-view-btn">List View</button>
+            <button class="btn btn-secondary" id="map-view-btn">Map View</button>
+        </div>
+        
+        <div class="bus-list" id="list-view">
+            <table class="bus-table">
+                <thead>
+                    <tr>
+                        <th>Bus ID</th>
+                        <th>Bus Number</th>
+                        <th>Type</th>
+                        <th>Depot</th>
+                        <th>Capacity</th>
+                        <th>Status</th>
+                        <th>Last Maintenance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="bus-data">
+                    <!-- Bus data will be populated here -->
+                </tbody>
+            </table>
+            
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#" class="active">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+        
+        <div class="map-view" id="map-view" style="display: none;">
+            Map view will be displayed here
+        </div>
+    </div>
+
+    <script>
+        // Sample data for buses
+        const busesData = [
+            { id: "GSR001", number: "GJ-18-Z-1234", type: "Ordinary", depot: "Ahmedabad", capacity: 52, status: "available", lastMaintenance: "2025-02-15" },
+            { id: "GSR002", number: "GJ-18-Z-2345", type: "Express", depot: "Vadodara", capacity: 45, status: "route", lastMaintenance: "2025-02-10" },
+            { id: "GSR003", number: "GJ-18-Z-3456", type: "Luxury", depot: "Surat", capacity: 40, status: "maintenance", lastMaintenance: "2025-03-05" },
+            { id: "GSR004", number: "GJ-18-Z-4567", type: "Sleeper", depot: "Rajkot", capacity: 36, status: "available", lastMaintenance: "2025-02-20" },
+            { id: "GSR005", number: "GJ-18-Z-5678", type: "Ordinary", depot: "Ahmedabad", capacity: 52, status: "available", lastMaintenance: "2025-01-25" },
+            { id: "GSR006", number: "GJ-18-Z-6789", type: "Express", depot: "Surat", capacity: 45, status: "route", lastMaintenance: "2025-02-18" },
+            { id: "GSR007", number: "GJ-18-Z-7890", type: "Luxury", depot: "Vadodara", capacity: 40, status: "maintenance", lastMaintenance: "2025-03-01" },
+            { id: "GSR008", number: "GJ-18-Z-8901", type: "Ordinary", depot: "Rajkot", capacity: 52, status: "available", lastMaintenance: "2025-02-22" }
+        ];
+
+        // Function to render bus data
+        function renderBusData(data) {
+            const busDataElement = document.getElementById('bus-data');
+            busDataElement.innerHTML = '';
+            
+            data.forEach(bus => {
+                let statusClass = '';
+                switch(bus.status) {
+                    case 'available':
+                        statusClass = 'status-available';
+                        break;
+                    case 'maintenance':
+                        statusClass = 'status-maintenance';
+                        break;
+                    case 'route':
+                        statusClass = 'status-route';
+                        break;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${bus.id}</td>
+                    <td>${bus.number}</td>
+                    <td>${bus.type}</td>
+                    <td>${bus.depot}</td>
+                    <td>${bus.capacity}</td>
+                    <td><span class="status ${statusClass}">${bus.status.charAt(0).toUpperCase() + bus.status.slice(1)}</span></td>
+                    <td>${bus.lastMaintenance}</td>
+                    <td>
+                        <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="viewDetails('${bus.id}')">View</button>
+                        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;" onclick="assignBus('${bus.id}')">Assign</button>
+                    </td>
+                `;
+                busDataElement.appendChild(row);
+            });
+        }
+
+        // Function to filter buses based on form values
+        function filterBuses() {
+            const depot = document.getElementById('depot').value.toLowerCase();
+            const busType = document.getElementById('bus-type').value.toLowerCase();
+            const status = document.getElementById('status').value.toLowerCase();
+            const busNumber = document.getElementById('bus-number').value.toLowerCase();
+            const capacity = document.getElementById('capacity').value;
+            
+            const filteredData = busesData.filter(bus => {
+                return (!depot || bus.depot.toLowerCase() === depot) &&
+                       (!busType || bus.type.toLowerCase() === busType) &&
+                       (!status || bus.status.toLowerCase() === status) &&
+                       (!busNumber || bus.number.toLowerCase().includes(busNumber)) &&
+                       (!capacity || bus.capacity >= parseInt(capacity));
+            });
+            
+            renderBusData(filteredData);
+        }
+
+        // Function to reset filters
+        function resetFilters() {
+            document.getElementById('depot').value = '';
+            document.getElementById('bus-type').value = '';
+            document.getElementById('status').value = '';
+            document.getElementById('bus-number').value = '';
+            document.getElementById('capacity').value = '';
+            document.getElementById('date').value = '';
+            
+            renderBusData(busesData);
+        }
+
+        // Functions for view toggle
+        function showListView() {
+            document.getElementById('list-view').style.display = 'block';
+            document.getElementById('map-view').style.display = 'none';
+            document.getElementById('list-view-btn').className = 'btn btn-primary';
+            document.getElementById('map-view-btn').className = 'btn btn-secondary';
+        }
+
+        function showMapView() {
+            document.getElementById('list-view').style.display = 'none';
+            document.getElementById('map-view').style.display = 'block';
+            document.getElementById('list-view-btn').className = 'btn btn-secondary';
+            document.getElementById('map-view-btn').className = 'btn btn-primary';
+        }
+
+        // Placeholder functions for bus actions
+        function viewDetails(busId) {
+            alert(`Viewing details for bus ${busId}`);
+        }
+
+        function assignBus(busId) {
+            alert(`Assigning bus ${busId} to a route`);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderBusData(busesData);
+            
+            // Add event listeners
+            document.getElementById('search-btn').addEventListener('click', filterBuses);
+            document.getElementById('reset-btn').addEventListener('click', resetFilters);
+            document.getElementById('list-view-btn').addEventListener('click', showListView);
+            document.getElementById('map-view-btn').addEventListener('click', showMapView);
+        });
+    </script>
+</body>
+</html>
