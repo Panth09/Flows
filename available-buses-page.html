@@ -10,6 +10,7 @@
             --secondary-color: #6c757d;
             --success-color: #198754;
             --danger-color: #dc3545;
+            --warning-color: #ffc107;
             --light-color: #f8f9fa;
             --dark-color: #212529;
         }
@@ -254,12 +255,18 @@
             <nav class="navbar">
                 <div class="logo">GSRTC</div>
                 <ul class="nav-links">
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Available Buses</a></li>
-                    <li><a href="#">Emergency</a></li>
-                    <li><a href="#">Finance</a></li>
-                    <li><a href="#">Workshop</a></li>
-                    <li><a href="#">Logout</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="emergency-page.html">Emergency</a></li>
+                    <li><a href="maintenance-page.html">Maintenance</a></li>
+                    <li><a href="accounting.html">Accounting</a></li>
+                    <li><a href="workshop.html">Workshop</a></li>
+                    <li><a href="stores.html">Stores</a></li>
+                    <li><a href="purchase.html">Purchase</a></li>
+                    <li><a href="traffic.html">Traffic</a></li>
+                    <li class="menu-item" id="logoutBtn">
+                        <span class="menu-icon">🚪</span>
+                        <span>Logout</span>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -361,6 +368,17 @@
     </div>
 
     <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                // Clear any stored session data (like tokens or user info)
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("gsrtcUser");
+                sessionStorage.removeItem("authToken");
+                sessionStorage.removeItem("gsrtcUser");
+                window.location.href = "login-page.html";
+            });
+        }
         // Sample data for buses
         const busesData = [
             { id: "GSR001", number: "GJ-18-Z-1234", type: "Ordinary", depot: "Ahmedabad", capacity: 52, status: "available", lastMaintenance: "2025-02-15" },
@@ -441,7 +459,7 @@
             renderBusData(busesData);
         }
 
-        // Functions for view toggle
+        // Function to toggle views
         function showListView() {
             document.getElementById('list-view').style.display = 'block';
             document.getElementById('map-view').style.display = 'none';

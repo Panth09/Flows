@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSRTC - User Profile</title>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .page-title {
+            margin: 20px 0;
+            color: var(--dark-color);
+        }
+
+        .notification-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+        }
+
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .profile-avatar {
+            background-color: #e9ecef;
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            color: var(--secondary-color);
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-role {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .profile-contact {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .contact-item i {
+            width: 24px;
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .profile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .tab-container {
+            margin-top: 20px;
+        }
+
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .activity-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .activity-title {
+            font-weight: 500;
+        }
+
+        .activity-date {
+            color: var(--secondary-color);
+            font-size: 14px;
+        }
+
+        .activity-description {
+            color: var(--secondary-color);
+        }
+
+        .emergency-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .emergency-table th,
+        .emergency-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .emergency-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .emergency-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .priority {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority.high {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .priority.medium {
+            background-color: #fff3cd;
+            color: #664d03;
+        }
+
+        .priority.low {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.online {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-badge.away {
+            background-color: #fff3cd;
+            color: #664d03;
+        }
+
+        .status-badge.offline {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 0 5px 5px 0;
+            font-size: 14px;
+        }
+
+        .skill-progress {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .skill-progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            background-color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-actions {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">GSRTC</div>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="available-buses-page.html">Available Buses</a></li>
+                    <li><a href="maintenance-page.html">Maintenance</a></li>
+                    <li><a href="emergency-page.html">Emergency</a></li>
+                    <li><a href="accounting.html">Accounting</a></li>
+                    <li><a href="workshop.html">Workshop</a></li>
+                    <li><a href="stores.html">Stores</a></li>
+                    <li><a href="purchase.html">Purchase</a></li>
+                    <li><a href="traffic.html">Traffic</a></li>
+                    <li class="notification-bell">
+                        <a href="#">Notifications</a>
+                        <span class="notification-count">3</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">User Profile</h1>
+        
+        <div class="profile-layout">
+            <div class="profile-sidebar">
+                <div class="card">
+                    <div class="profile-avatar">
+                        <img src="/api/placeholder/150/150" alt="Profile Photo">
+                    </div>
+                    <div class="profile-info">
+                        <h2 class="profile-name">Rajesh Patel</h2>
+                        <div class="profile-role">Emergency Response Manager</div>
+                        <span class="status-badge online">Online</span>
+                    </div>
+                    <div class="profile-contact">
+                        <div class="contact-item">
+                            <i>📧</i>
+                            <span>rajesh.patel@gsrtc.in</span>
+                        </div>
+                        <div class="contact-item">
+                            <i>📱</i>
+                            <span>+91 98765 43210</span>
+                        </div>
+                        <div class="contact-item">
+                            <i>🏢</i>
+                            <span>Ahmedabad Central Depot</span>
+                        </div>
+                        <div class="contact-item">
+                            <i>🔖</i>
+                            <span>Employee ID: GSRTC-EM-1023</span>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary">Edit Profile</button>
+                        <button class="btn btn-outline">Change Password</button>
+                        <button class="btn btn-secondary">Emergency Contacts</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Skills & Expertise</h2>
+                    </div>
+                    <div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Emergency Management</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="skill-progress">
+                                <div class="skill-progress-bar" style="width: 95%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Vehicle Diagnostics</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-progress">
+                                <div class="skill-progress-bar" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Team Leadership</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-progress">
+                                <div class="skill-progress-bar" style="width: 90%;"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Route Planning</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="skill-progress">
+                                <div class="skill-progress-bar" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <span class="skill-tag">First Aid</span>
+                        <span class="skill-tag">Road Safety</span>
+                        <span class="skill-tag">GPS Navigation</span>
+                        <span class="skill-tag">Crisis Management</span>
+                        <span class="skill-tag">Communication</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-main">
+                <div class="card">
+                    <div class="tab-container">
+                        <div class="tab-header">
+                            <button class="tab-btn active" onclick="openTab(event, 'activities')">Recent Activities</button>
+                            <button class="tab-btn" onclick="openTab(event, 'emergency')">Emergency Responses</button>
+                            <button class="tab-btn" onclick="openTab(event, 'settings')">Account Settings</button>
+                        </div>
+                        
+                        <div id="activities" class="tab-content active">
+                            <div class="activity-item">
+                                <div class="activity-header">
+                                    <div class="activity-title">Managed Bus Breakdown Response</div>
+                                    <div class="activity-date">Today, 10:30 AM</div>
+                                </div>
+                                <div class="activity-description">
+                                    Coordinated rescue operation for Bus GJ-18-Z-1234 that broke down on Ahmedabad-Vadodara Expressway with 42 passengers.
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-header">
+                                    <div class="activity-title">Updated Emergency Protocol</div>
+                                    <div class="activity-date">Yesterday, 3:15 PM</div>
+                                </div>
+                                <div class="activity-description">
+                                    Submitted revised monsoon emergency response protocols for central region depots.
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-header">
+                                    <div class="activity-title">Conducted Training Session</div>
+                                    <div class="activity-date">March 12, 2025</div>
+                                </div>
+                                <div class="activity-description">
+                                    Led emergency response training for 15 new drivers focusing on passenger safety and communication.
+                                </div>
+                            </div>
+                            
+                            <div class="activity-item">
+                                <div class="activity-header">
+                                    <div class="activity-title">Team Performance Review</div>
+                                    <div class="activity-date">March 10, 2025</div>
+                                </div>
+                                <div class="activity-description">
+                                    Completed quarterly performance evaluations for emergency response team members.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="emergency" class="tab-content">
+                            <table class="emergency-table">
+                                <thead>
+                                    <tr>
+                                        <th>Incident ID</th>
+                                        <th>Date</th>
+                                        <th>Location</th>
+                                        <th>Type</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>ER-2025-0142</td>
+                                        <td>Mar 15, 2025</td>
+                                        <td>Ahmedabad-Vadodara Expressway</td>
+                                        <td>Bus Breakdown</td>
+                                        <td><span class="priority high">High</span></td>
+                                        <td>Resolved</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ER-2025-0141</td>
+                                        <td>Mar 14, 2025</td>
+                                        <td>Rajkot-Morbi Highway</td>
+                                        <td>Flat Tire</td>
+                                        <td><span class="priority low">Low</span></td>
+                                        <td>Resolved</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ER-2025-0138</td>
+                                        <td>Mar 12, 2025</td>
+                                        <td>Surat City Bus Station</td>
+                                        <td>Medical Emergency</td>
+                                        <td><span class="priority high">High</span></td>
+                                        <td>Resolved</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ER-2025-0135</td>
+                                        <td>Mar 10, 2025</td>
+                                        <td>Vadodara-Bharuch Road</td>
+                                        <td>Minor Accident</td>
+                                        <td><span class="priority medium">Medium</span></td>
+                                        <td>Resolved</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ER-2025-0132</td>
+                                        <td>Mar 08, 2025</td>
+                                        <td>Gandhinagar Depot</td>
+                                        <td>Engine Failure</td>
+                                        <td><span class="priority medium">Medium</span></td>
+                                        <td>Resolved</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div id="settings" class="tab-content">
+                            <form>
+                                <div class="form-group">
+                                    <label for="display-name">Display Name</label>
+                                    <input type="text" id="display-name" value="Rajesh Patel">
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" value="rajesh.patel@gsrtc.in">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Phone Number</label>
+                                        <input type="tel" id="phone" value="+91 98765 43210">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="designation">Designation</label>
+                                    <input type="text" id="designation" value="Emergency Response Manager">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="depot">Depot</label>
+                                    <select id="depot">
+                                        <option selected>Ahmedabad Central Depot</option>
+                                        <option>Vadodara Main Depot</option>
+                                        <option>Surat City Depot</option>
+                                        <option>Rajkot Highway Depot</option>
+                                        <option>Gandhinagar Depot</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bio">Bio</label>
+                                    <textarea id="bio">Experienced emergency response professional with over 10 years in the transportation industry. Specialized in managing crisis situations and ensuring passenger safety.</textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="notification">Notification Preferences</label>
+                                    <div style="margin-top: 10px;">
+                                        <input type="checkbox" id="email-notif" checked>
+                                        <label for="email-notif" style="display: inline;">Email Notifications</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="sms-notif" checked>
+                                        <label for="sms-notif" style="display: inline;">SMS Notifications</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="app-notif" checked>
+                                        <label for="app-notif" style="display: inline;">In-App Notifications</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="btn btn-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                // Clear any stored session data (like tokens or user info)
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("gsrtcUser");
+                sessionStorage.removeItem("authToken");
+                sessionStorage.removeItem("gsrtcUser");
+                window.location.href = "login-page.html";
+            });
+        }
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.getElementsByClassName('tab-btn');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+            
+            // Show the selected tab content and mark the button as active
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>

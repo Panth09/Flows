@@ -456,11 +456,17 @@
     </style>
 </head>
 <body>
+    <div class="login-required" id="loginRequired" style="display: none;">
+        <h2>Authentication Required</h2>
+        <p>You need to log in to access this page.</p>
+        <button onclick="redirectToLogin()">Login</button>
+    </div>
+
     <div class="dashboard-container" id="dashboardContainer">
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
-                    <img src="/api/placeholder/30/30" alt="GSRTC Logo">
+                    <img src="https://via.placeholder.com/30" alt="GSRTC Logo">
                 </div>
                 <div class="sidebar-title">GSRTC</div>
             </div>
@@ -480,50 +486,37 @@
                     <span>Dashboard</span>
                 </li>
                 <li class="menu-item">
-                    <span class="menu-icon">🚌</span>
-                    <span>Available Buses</span>
+                    <a href="available-buses-page.html" style="color: inherit; text-decoration: none;">🚌 Available Buses</a>
                 </li>
                 <li class="menu-item">
-                    <span class="menu-icon">🔧</span>
-                    <span>Maintenance</span>
+                    <a href="maintenance-page.html" style="color: inherit; text-decoration: none;">🔧 Maintenance</a>
                 </li>
                 <li class="menu-item">
-                    <span class="menu-icon">🚨</span>
-                    <span>Emergency</span>
+                    <a href="emergency-page.html" style="color: inherit; text-decoration: none;">🚨 Emergency</a>
                 </li>
                 
                 <li class="menu-category">Departments</li>
                 <li class="menu-item">
-                    <span class="menu-icon">💰</span>
-                    <span>Accounting</span>
+                    <a href="accounting.html" style="color: inherit; text-decoration: none;">💰 Accounting</a>
+                </li>
+                <li class="menu-item"><a href="workshop.html" style="color: inherit; text-decoration: none;">🛠️ Workshop</a>
                 </li>
                 <li class="menu-item">
-                    <span class="menu-icon">🛠️</span>
-                    <span>Workshop</span>
+                    <a href="stores.html" style="color: inherit; text-decoration: none;">📦 Stores</a>
                 </li>
                 <li class="menu-item">
-                    <span class="menu-icon">📦</span>
-                    <span>Stores</span>
+                    <a href="purchase.html" style="color: inherit; text-decoration: none;">🛒 Purchase</a>
                 </li>
-                <li class="menu-item">
-                    <span class="menu-icon">🛒</span>
-                    <span>Purchase</span>
-                </li>
-                <li class="menu-item">
-                    <span class="menu-icon">🚦</span>
-                    <span>Traffic</span>
+                <li class="menu-item"><a href="traffic.html" style="color: inherit; text-decoration: none;">🚦 Traffic</a>
                 </li>
                 
                 <li class="menu-category">Settings</li>
-                <li class="menu-item">
-                    <span class="menu-icon">👤</span>
-                    <span>Profile</span>
+                <li class="menu-item"><a href="profile.html" style="color: inherit; text-decoration: none;">👤 Profile</a>
                 </li>
                 <li class="menu-item">
-                    <span class="menu-icon">⚙️</span>
-                    <span>Settings</span>
+                    <a href="settings.html" style="color: inherit; text-decoration: none;">⚙️ Settings</a>
                 </li>
-                <li class="menu-item" id="logoutBtn">
+                <li class="menu-item" id="logoutBtn" onclick="logout()">
                     <span class="menu-icon">🚪</span>
                     <span>Logout</span>
                 </li>
@@ -681,20 +674,78 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if user is logged in
-            const userInfo = JSON.parse(sessionStorage.getItem('gsrtcUser') || '{}');
-            if (!userInfo.loggedIn) {
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            // Set user information
-            const userName = document.getElementById('userName');
-            const userRole = document.getElementById('userRole');
-            const userInitials = document.getElementById('userInitials');
-            
-            if (userName && userRole && userInitials) {
-                userName.textContent = userInfo.username || 'User';
-                userRole.textContent = userInfo.role ? userInfo.role.charAt(0).toUpperCase() + userInfo.role.slice(1) : 'User';
-                userInitials
+    document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const userInfo = {
+        loggedIn: isLoggedIn,
+        username: isLoggedIn ? 'Admin User' : '',
+        role: isLoggedIn ? 'Administrator' : ''
+    };
+    if (!userInfo.loggedIn) {
+        window.location.href = 'login-page.html';
+        return;
+    }
+    
+    
+
+
+
+    // Set user information
+    const userName = document.getElementById('userName');
+    const userRole = document.getElementById('userRole');
+    const userInitials = document.getElementById('userInitials');
+    
+    if (userName && userRole && userInitials) {
+        userName.textContent = userInfo.username || 'User';
+        userRole.textContent = userInfo.role ? userInfo.role.charAt(0).toUpperCase() + userInfo.role.slice(1) : 'User';
+        userInitials.textContent = userInfo.username ? userInfo.username.charAt(0) : 'U';
+    }
+    
+    function logout() {
+        console.log("Logout function triggered"); // Log for debugging
+        console.log("Checking if user is logged in..."); // Log for debugging
+        console.log("Clearing session data..."); // Log for debugging
+        console.log("Session data cleared."); // Log for debugging
+        
+        // Clear any stored session data (like tokens or user info)
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("gsrtcUser");
+        sessionStorage.removeItem("authToken");
+        sessionStorage.removeItem("gsrtcUser");
+        
+        console.log("Redirecting to login page..."); // Log for debugging
+        console.log("Logout process completed."); // Log for debugging
+        window.location.href = "login-page.html";
+    }
+    
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    } else {
+        console.error("Logout button not found."); // Moved inside the if-else block
+    }
+    
+    // Fetch and display statistics
+    fetchStatistics();
+
+    // Function to fetch statistics
+    function fetchStatistics() {
+        // Simulated data fetching
+        const stats = {
+            totalBuses: 1243,
+            todaysRevenue: '₹24.5L',
+            busesInMaintenance: 78,
+            emergencyCases: 3
+        };
+
+        document.querySelector('.stat-card-value:nth-child(1)').textContent = stats.totalBuses;
+        document.querySelector('.stat-card-value:nth-child(2)').textContent = stats.todaysRevenue;
+        document.querySelector('.stat-card-value:nth-child(3)').textContent = stats.busesInMaintenance;
+        document.querySelector('.stat-card-value:nth-child(4)').textContent = stats.emergencyCases;
+    }
+});
+
+    </script>
+    </body>
+    </html>

@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSRTC - Settings</title>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --border-color: #dee2e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .page-title {
+            margin: 20px 0;
+            color: var(--dark-color);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .notification-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+
+        .settings-sidebar {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .settings-menu {
+            list-style: none;
+        }
+
+        .settings-menu li {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .settings-menu a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .settings-menu a:hover {
+            background-color: var(--light-color);
+        }
+
+        .settings-menu a.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+        }
+
+        .settings-content {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+            scroll-margin-top: 20px;  /* Add scroll margin for better positioning */
+        }
+
+        .settings-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .settings-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: black; /* Change title color to black */
+        }
+
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-item-label {
+            font-weight: 500;
+        }
+
+        .setting-item-description {
+            font-size: 14px;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        /* New styles for enhancements */
+        .btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .form-actions .btn-success:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">GSRTC</div>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="available-buses-page.html">Available Buses</a></li>
+                    <li><a href="maintenance-page.html">Maintenance</a></li>
+                    <li><a href="emergency-page.html">Emergency</a></li>
+                    <li><a href="accounting.html">Accounting</a></li>
+                    <li><a href="workshop.html">Workshop</a></li>
+                    <li><a href="stores.html">Stores</a></li>
+                    <li><a href="purchase.html">Purchase</a></li>
+                    <li><a href="traffic.html">Traffic</a></li>
+                    <li class="notification-bell">
+                        <a href="#">Notifications</a>
+                        <span class="notification-count">3</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Settings</h1>
+        
+        <div class="settings-grid">
+            <div class="settings-sidebar">
+                <ul class="settings-menu">
+                    <li><a href="#account-information" class="active">Account Settings</a></li>
+                    <li><a href="#notification-preferences">Notification Preferences</a></li>
+                    <li><a href="#emergency-alert-settings">Emergency Alerts</a></li>
+                    <li><a href="#password">Security Settings</a></li>
+                    <li><a href="#display-settings">Display Settings</a></li>
+                    <li><a href="#system-integration">System Settings</a></li>
+                    <li><a href="#data-privacy">Integration Settings</a></li>
+                    <li><a href="#account-actions">Account Actions</a></li>
+                </ul>
+            </div>
+            
+            <div class="settings-content">
+                <div id="account-information" class="settings-section">
+                    <h2 class="settings-section-title">Account Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" value="Rajesh" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" value="Patel" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" value="rajesh.patel@gsrtc.gov.in" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" value="+91 9876543210" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="designation">Designation</label>
+                        <input type="text" id="designation" value="Emergency Response Manager" required>
+                    </div>
+                </div>
+                
+                <div id="password" class="settings-section">
+                    <h2 class="settings-section-title">Password</h2>
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="Enter current password">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary">Update Password</button>
+                    </div>
+                </div>
+                
+                <div id="notification-preferences" class="settings-section">
+                    <h2 class="settings-section-title">Notification Preferences</h2>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Email Notifications</div>
+                            <div class="setting-item-description">Receive emergency alerts via email</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">SMS Notifications</div>
+                            <div class="setting-item-description">Receive emergency alerts via SMS</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Push Notifications</div>
+                            <div class="setting-item-description">Receive in-app notifications</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Daily Summary</div>
+                            <div class="setting-item-description">Receive daily summary of emergency incidents</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="emergency-alert-settings" class="settings-section">
+                    <h2 class="settings-section-title">Emergency Alert Settings</h2>
+                    <div class="form-group">
+                        <label for="alertPriority">Alert Priority Threshold</label><select id="alertPriority">
+                            <option value="all">All Alerts</option>
+                            <option value="high" selected>High Priority Only</option>
+                            <option value="critical">Critical Only</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Sound Alerts</div>
+                            <div class="setting-item-description">Play sound for high priority alerts</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Vibration Alerts</div>
+                            <div class="setting-item-description">Vibrate device for emergency alerts</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyContacts">Additional Emergency Contacts</label>
+                        <textarea id="emergencyContacts" rows="3" placeholder="Enter additional contacts to notify during emergencies"></textarea>
+                    </div>
+                </div>
+                
+                <div id="display-settings" class="settings-section">
+                    <h2 class="settings-section-title">Display Settings</h2>
+                    <div class="form-group">
+                        <label for="themeSelector">Theme</label>
+                        <select id="themeSelector">
+                            <option value="light" selected>Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="system">System Default</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fontSizeSelector">Font Size</label>
+                        <select id="fontSizeSelector">
+                            <option value="small">Small</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">High Contrast Mode</div>
+                            <div class="setting-item-description">Enhance visibility with high contrast colors</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Compact View</div>
+                            <div class="setting-item-description">Show more information with less spacing</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="system-integration" class="settings-section">
+                    <h2 class="settings-section-title">System Settings</h2>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Automatic Updates</div>
+                            <div class="setting-item-description">Automatically update system when new versions are available</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataRefreshRate">Data Refresh Rate</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="data-privacy" class="settings-section">
+                    <h2 class="settings-section-title">Integration Settings</h2>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">GPS Integration</div>
+                            <div class="setting-item-description">Enable GPS tracking for real-time bus location</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Weather Service Integration</div>
+                            <div class="setting-item-description">Enable weather alerts for route planning</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div>
+                            <div class="setting-item-label">Traffic Integration</div>
+                            <div class="setting-item-description">Enable traffic alerts for route optimization</div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="apiKey">API Key</label>
+                        <input type="text" id="apiKey" value="••••••••••••••••" readonly>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-primary">Regenerate API Key</button>
+                    </div>
+                </div>
+                
+                <div id="account-actions" class="settings-section">
+                    <h2 class="settings-section-title">Account Actions</h2>
+                    <div class="form-group">
+                        <label for="dataExport">Export Account Data</label>
+                        <div class="form-actions" style="text-align: left; margin-top: 10px;">
+                            <button class="btn btn-primary">Export Data</button>
+                        </div>
+                        <p style="font-size: 14px; color: var(--secondary-color); margin-top: 10px;">
+                            Export all your account data including preferences and settings in JSON format.
+                        </p>
+                    </div>
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="accountDeactivation">Deactivate Account</label>
+                        <div class="form-actions" style="text-align: left; margin-top: 10px;">
+                            <button class="btn btn-danger">Deactivate Account</button>
+                        </div>
+                        <p style="font-size: 14px; color: var(--secondary-color); margin-top: 10px;">
+                            Temporarily deactivate your account. You can reactivate it anytime by logging in.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-success">Save All Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        // Enhanced JavaScript to handle all settings functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // =============================================
+    // GLOBAL VARIABLES AND STATE
+    // =============================================
+    
+    // Global state object to track all settings
+    const settingsState = {
+        hasUnsavedChanges: false,
+        originalValues: {}
+    };
+    
+    // =============================================
+    // GENERAL PAGE SETUP
+    // =============================================
+    
+    // Handle sidebar navigation
+    const menuLinks = document.querySelectorAll('.settings-menu a');
+    const settingsSections = document.querySelectorAll('.settings-section');
+    
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Remove active class from all links
+            menuLinks.forEach(item => item.classList.remove('active'));
+            
+            // Add active class to clicked link
+            this.classList.add('active');
+            
+            // Smooth scroll to section
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                window.scrollTo({
+                    top: targetSection.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    
+    // =============================================
+    // FORM FIELD TRACKING AND CHANGE DETECTION
+    // =============================================
+    
+    // Initialize form field tracking
+    function initializeFormTracking() {
+        // Track all input fields
+        const allInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"])');
+        allInputs.forEach(input => {
+            settingsState.originalValues[input.id] = input.value;
+            
+            input.addEventListener('input', function() {
+                markAsChanged();
+            });
+        });
+        
+        // Track all textareas
+        const allTextareas = document.querySelectorAll('textarea');
+        allTextareas.forEach(textarea => {
+            settingsState.originalValues[textarea.id] = textarea.value;
+            
+            textarea.addEventListener('input', function() {
+                markAsChanged();
+            });
+        });
+        
+        // Track all select elements
+        const allSelects = document.querySelectorAll('select');
+        allSelects.forEach(select => {
+            settingsState.originalValues[select.id] = select.value;
+            
+            select.addEventListener('change', function() {
+                markAsChanged();
+                
+                // Apply immediate changes for certain selects
+                if (select.id === 'themeSelector') {
+                    applyTheme(select.value);
+                }
+                if (select.id === 'fontSizeSelector') {
+                    applyFontSize(select.value);
+                }
+            });
+        });
+        
+        // Track all checkboxes
+        const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+        allCheckboxes.forEach(checkbox => {
+            const id = checkbox.id || Math.random().toString(36).substring(2, 9); // Generate ID if not present
+            if (!checkbox.id) checkbox.id = id;
+            
+            settingsState.originalValues[id] = checkbox.checked;
+            
+            checkbox.addEventListener('change', function() {
+                markAsChanged();
+                
+                // Apply immediate changes for certain toggles
+                if (checkbox.closest('#display-settings')) {
+                    if (checkbox.closest('.setting-item:nth-child(3)')) {
+                        // High contrast mode
+                        applyHighContrastMode(checkbox.checked);
+                    }
+                    if (checkbox.closest('.setting-item:nth-child(4)')) {
+                        // Compact view
+                        applyCompactView(checkbox.checked);
+                    }
+                }
+            });
+        });
+    }
+    
+    // Mark form as changed
+    function markAsChanged() {
+        settingsState.hasUnsavedChanges = true;
+        const saveButton = document.querySelector('.settings-content > .form-actions .btn-success');
+        saveButton.classList.add('active');
+        saveButton.disabled = false;
+    }
+    
+    // Reset changes tracking
+    function resetChangesTracking() {
+        settingsState.hasUnsavedChanges = false;
+        const saveButton = document.querySelector('.settings-content > .form-actions .btn-success');
+        saveButton.classList.remove('active');
+        saveButton.disabled = true;
+        
+        // Update original values to current values
+        const allInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"])');
+        allInputs.forEach(input => {
+            settingsState.originalValues[input.id] = input.value;
+        });
+        
+        // Update textarea values
+        const allTextareas = document.querySelectorAll('textarea');
+        allTextareas.forEach(textarea => {
+            settingsState.originalValues[textarea.id] = textarea.value;
+        });
+        
+        // Update select values
+        const allSelects = document.querySelectorAll('select');
+        allSelects.forEach(select => {
+            settingsState.originalValues[select.id] = select.value;
+        });
+        
+        // Update checkbox states
+        const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+        allCheckboxes.forEach(checkbox => {
+            settingsState.originalValues[checkbox.id] = checkbox.checked;
+        });
+    }
+    
+    // =============================================
+    // ACCOUNT INFORMATION SECTION
+    // =============================================
+    
+    // Get account info form elements
+    const accountInfoFields = document.querySelectorAll('#account-information input');
+    
+    // Add validation to email field
+    const emailField = document.getElementById('email');
+    if (emailField) {
+        emailField.addEventListener('change', function() {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(this.value)) {
+                alert('Please enter a valid email address');
+                this.value = settingsState.originalValues[this.id];
+                return;
+            }
+        });
+    }
+    
+    // Add validation to phone field
+    const phoneField = document.getElementById('phone');
+    if (phoneField) {
+        phoneField.addEventListener('change', function() {
+            const phoneRegex = /^[+]?[\d\s-]{10,15}$/;
+            if (!phoneRegex.test(this.value)) {
+                alert('Please enter a valid phone number');
+                this.value = settingsState.originalValues[this.id];
+                return;
+            }
+        });
+    }
+    
+    // =============================================
+    // PASSWORD SECTION
+    // =============================================
+    
+    // Get password form elements
+    const currentPasswordField = document.getElementById('currentPassword');
+    const newPasswordField = document.getElementById('newPassword');
+    const confirmPasswordField = document.getElementById('confirmPassword');
+    const updatePasswordBtn = document.querySelector('#password .btn-primary');
+    
+    // Add password strength indicator
+    if (newPasswordField) {
+        // Create password strength indicator elements
+        const strengthIndicator = document.createElement('div');
+        strengthIndicator.className = 'password-strength';
+        strengthIndicator.innerHTML = `
+            <div class="strength-bar">
+                <div class="strength-progress"></div>
+            </div>
+            <div class="strength-text">Password strength: <span>None</span></div>
+        `;
+        
+        // Add strength indicator after new password field
+        newPasswordField.parentNode.appendChild(strengthIndicator);
+        
+        // Style the strength indicator
+        const style = document.createElement('style');
+        style.textContent = `
+            .password-strength {
+                margin-top: 5px;
+                font-size: 12px;
+            }
+            .strength-bar {
+                height: 5px;
+                background-color: #eee;
+                border-radius: 2px;
+                margin-bottom: 5px;
+            }
+            .strength-progress {
+                height: 100%;
+                width: 0;
+                background-color: #ccc;
+                border-radius: 2px;
+                transition: width 0.3s ease, background-color 0.3s ease;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Update strength indicator on input
+        newPasswordField.addEventListener('input', function() {
+            const password = this.value;
+            const strengthProgress = document.querySelector('.strength-progress');
+            const strengthText = document.querySelector('.strength-text span');
+            
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 1;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 1;
+            if (password.match(/\d/)) strength += 1;
+            if (password.match(/[^a-zA-Z\d]/)) strength += 1;
+            
+            // Update visual indicator
+            switch (strength) {
+                case 0:
+                    strengthProgress.style.width = '0%';
+                    strengthProgress.style.backgroundColor = '#ccc';
+                    strengthText.textContent = 'None';
+                    break;
+                case 1:
+                    strengthProgress.style.width = '25%';
+                    strengthProgress.style.backgroundColor = '#f44336';
+                    strengthText.textContent = 'Weak';
+                    break;
+                case 2:
+                    strengthProgress.style.width = '50%';
+                    strengthProgress.style.backgroundColor = '#ff9800';
+                    strengthText.textContent = 'Fair';
+                    break;
+                case 3:
+                    strengthProgress.style.width = '75%';
+                    strengthProgress.style.backgroundColor = '#2196f3';
+                    strengthText.textContent = 'Good';
+                    break;
+                case 4:
+                    strengthProgress.style.width = '100%';
+                    strengthProgress.style.backgroundColor = '#4caf50';
+                    strengthText.textContent = 'Strong';
+                    break;
+            }
+        });
+    }
+    
+    // Add password update functionality
+    if (updatePasswordBtn) {
+        updatePasswordBtn.addEventListener('click', function() {
+            if (!currentPasswordField.value) {
+                alert('Please enter your current password');
+                return;
+            }
+            
+            if (!newPasswordField.value) {
+                alert('Please enter a new password');
+                return;
+            }
+            
+            if (newPasswordField.value !== confirmPasswordField.value) {
+                alert('New password and confirmation do not match');
+                return;
+            }
+            
+            if (newPasswordField.value.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
+            
+            // Success case
+            alert('Password updated successfully!');
+            currentPasswordField.value = '';
+            newPasswordField.value = '';
+            confirmPasswordField.value = '';
+            
+            // Reset strength indicator if it exists
+            const strengthProgress = document.querySelector('.strength-progress');
+            const strengthText = document.querySelector('.strength-text span');
+            if (strengthProgress && strengthText) {
+                strengthProgress.style.width = '0%';
+                strengthProgress.style.backgroundColor = '#ccc';
+                strengthText.textContent = 'None';
+            }
+        });
+    }
+    
+    // =============================================
+    // TOGGLE SWITCHES
+    // =============================================
+    
+    // Get all toggle switches
+    const toggleSwitches = document.querySelectorAll('.toggle-switch input');
+    
+    // Add change event to all toggles
+    toggleSwitches.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            // Add visual feedback
+            const slider = this.nextElementSibling;
+            slider.style.transition = 'background-color 0.3s ease';
+            
+            // Add animation effect
+            if (this.checked) {
+                slider.style.backgroundColor = 'var(--primary-color)';
+            } else {
+                slider.style.backgroundColor = '#ccc';
+            }
+        });
+    });
+    
+    // =============================================
+    // NOTIFICATION PREFERENCES
+    // =============================================
+    
+    // Get notification toggles
+    const emailToggle = document.querySelector('#notification-preferences .setting-item:nth-child(1) .toggle-switch input');
+    const smsToggle = document.querySelector('#notification-preferences .setting-item:nth-child(2) .toggle-switch input');
+    const pushToggle = document.querySelector('#notification-preferences .setting-item:nth-child(3) .toggle-switch input');
+    const dailySummaryToggle = document.querySelector('#notification-preferences .setting-item:nth-child(4) .toggle-switch input');
+    
+    // Add dependency between toggles
+    if (emailToggle && smsToggle && pushToggle) {
+        const allToggles = [emailToggle, smsToggle, pushToggle];
+        
+        allToggles.forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                // Ensure at least one notification method is enabled
+                const anyEnabled = allToggles.some(t => t.checked);
+                
+                if (!anyEnabled) {
+                    alert('You must enable at least one notification method');
+                    this.checked = true;
+                }
+            });
+        });
+    }
+    
+    // =============================================
+    // EMERGENCY ALERT SETTINGS
+    // =============================================
+    
+    // Get emergency alert elements
+    const alertPrioritySelect = document.getElementById('alertPriority');
+    const soundAlertsToggle = document.querySelector('#emergency-alert-settings .setting-item:nth-child(1) .toggle-switch input');
+    const vibrationAlertsToggle = document.querySelector('#emergency-alert-settings .setting-item:nth-child(2) .toggle-switch input');
+    const emergencyContactsField = document.getElementById('emergencyContacts');
+    
+    // Add validation to emergency contacts
+    if (emergencyContactsField) {
+        emergencyContactsField.addEventListener('change', function() {
+            const contacts = this.value.split(',').map(contact => contact.trim());
+            
+            // Validate each contact
+            for (const contact of contacts) {
+                if (contact === '') continue;
+                
+                // Check if it's a valid email or phone number
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const phoneRegex = /^[+]?[\d\s-]{10,15}$/;
+                
+                if (!emailRegex.test(contact) && !phoneRegex.test(contact)) {
+                    alert('Please enter valid email addresses or phone numbers separated by commas');
+                    return;
+                }
+            }
+        });
+    }
+    
+    // =============================================
+    // DISPLAY SETTINGS
+    // =============================================
+    
+    // Theme application function
+    function applyTheme(theme) {
+        const body = document.body;
+        
+        // Remove existing theme classes
+        body.classList.remove('theme-light', 'theme-dark', 'theme-system');
+        
+        // Add new theme class
+        body.classList.add(`theme-${theme}`);
+        
+        // Apply theme-specific variables
+        if (theme === 'dark') {
+            document.documentElement.style.backgroundColor = '#1f2937';
+            document.documentElement.style.color = '#f3f4f6';
+        } else if (theme === 'light') {
+            document.documentElement.style.setProperty('--primary-color', '#3b82f6');
+            document.documentElement.style.setProperty('--secondary-color', '#6b7280');
+            document.documentElement.style.setProperty('--light-color', '#f3f4f6');
+            document.documentElement.style.setProperty('--dark-color', '#1f2937');
+            document.documentElement.style.setProperty('--border-color', '#e5e7eb');
+            document.documentElement.style.backgroundColor = '#ffffff';
+            document.documentElement.style.color = '#1f2937';
+        } else if (theme === 'system') {
+            // Check system preference
+            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(prefersDarkMode ? 'dark' : 'light');
+        }
+        
+        // Save theme preference
+        localStorage.setItem('theme', theme);
+    }
+    
+    // Font size application function
+    function applyFontSize(size) {
+        document.documentElement.style.setProperty('--base-font-size', size);
+        localStorage.setItem('fontSize', size);
+    }
+    
+    // High contrast mode application
+    function applyHighContrastMode(enabled) {
+        if (enabled) {
+            document.documentElement.classList.add('high-contrast');
+            document.documentElement.style.setProperty('--primary-color', '#0000ff');
+            document.documentElement.style.setProperty('--secondary-color', '#000000');
+            document.documentElement.style.setProperty('--light-color', '#ffffff');
+            document.documentElement.style.setProperty('--dark-color', '#000000');
+            document.documentElement.style.setProperty('--border-color', '#000000');
+        } else {
+            document.documentElement.classList.remove('high-contrast');
+            // Restore theme based on current selection
+            const currentTheme = document.getElementById('themeSelector').value;
+            applyTheme(currentTheme);
+        }
+        localStorage.setItem('highContrast', enabled);
+    }
+    
+    // Compact view application
+    function applyCompactView(enabled) {
+        if (enabled) {
+            document.documentElement.classList.add('compact-view');
+            document.documentElement.style.setProperty('--spacing-unit', '0.5rem');
+        } else {
+            document.documentElement.classList.remove('compact-view');
+            document.documentElement.style.setProperty('--spacing-unit', '1rem');
+        }
+        localStorage.setItem('compactView', enabled);
+    }
+    
+    // Initialize display settings
+    function initializeDisplaySettings() {
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'system';
+        const themeSelector = document.getElementById('themeSelector');
+        if (themeSelector) {
+            themeSelector.value = savedTheme;
+            applyTheme(savedTheme);
+        }
+        
+        // Load saved font size
+        const savedFontSize = localStorage.getItem('fontSize') || '16px';
+        const fontSizeSelector = document.getElementById('fontSizeSelector');
+        if (fontSizeSelector) {
+            fontSizeSelector.value = savedFontSize;
+            applyFontSize(savedFontSize);
+        }
+        
+        // Load high contrast setting
+        const highContrastSetting = localStorage.getItem('highContrast') === 'true';
+        const highContrastToggle = document.querySelector('#display-settings .setting-item:nth-child(3) .toggle-switch input');
+        if (highContrastToggle) {
+            highContrastToggle.checked = highContrastSetting;
+            applyHighContrastMode(highContrastSetting);
+        }
+        
+        // Load compact view setting
+        const compactViewSetting = localStorage.getItem('compactView') === 'true';
+        const compactViewToggle = document.querySelector('#display-settings .setting-item:nth-child(4) .toggle-switch input');
+        if (compactViewToggle) {
+            compactViewToggle.checked = compactViewSetting;
+            applyCompactView(compactViewSetting);
+        }
+    }
+    
+    // =============================================
+    // PRIVACY SETTINGS
+    // =============================================
+    
+    // Get privacy setting elements
+    const dataSharingToggle = document.querySelector('#privacy-settings .setting-item:nth-child(1) .toggle-switch input');
+    const activityTrackingToggle = document.querySelector('#privacy-settings .setting-item:nth-child(2) .toggle-switch input');
+    const cookieConsentToggle = document.querySelector('#privacy-settings .setting-item:nth-child(3) .toggle-switch input');
+    
+    // Add data sharing consent warning
+    if (dataSharingToggle) {
+        dataSharingToggle.addEventListener('change', function() {
+            if (this.checked) {
+                const confirmed = confirm('By enabling data sharing, you agree that your usage data may be shared with third parties for service improvement. Continue?');
+                if (!confirmed) {
+                    this.checked = false;
+                }
+            }
+        });
+    }
+    
+    // =============================================
+    // LANGUAGE SETTINGS
+    // =============================================
+    
+    // Get language setting elements
+    const languageSelector = document.getElementById('languageSelector');
+    const dateFormatSelector = document.getElementById('dateFormatSelector');
+    const timeFormatSelector = document.getElementById('timeFormatSelector');
+    
+    // Add language change functionality
+    if (languageSelector) {
+        languageSelector.addEventListener('change', function() {
+            // In a real app, this would trigger language changes
+            // For now, just show a message
+            alert(`Language preference set to ${this.options[this.selectedIndex].text}`);
+            localStorage.setItem('language', this.value);
+        });
+    }
+    
+    // Initialize language from stored preferences
+    function initializeLanguageSettings() {
+        const savedLanguage = localStorage.getItem('language') || 'en';
+        const savedDateFormat = localStorage.getItem('dateFormat') || 'mm/dd/yyyy';
+        const savedTimeFormat = localStorage.getItem('timeFormat') || '12h';
+        
+        if (languageSelector) languageSelector.value = savedLanguage;
+        if (dateFormatSelector) dateFormatSelector.value = savedDateFormat;
+        if (timeFormatSelector) timeFormatSelector.value = savedTimeFormat;
+    }
+    
+    // =============================================
+    // FORM ACTIONS
+    // =============================================
+    
+    // Get form action buttons
+    const saveButton = document.querySelector('.settings-content > .form-actions .btn-success');
+    const cancelButton = document.querySelector('.settings-content > .form-actions .btn-secondary');
+    
+    // Add save functionality
+    if (saveButton) {
+        saveButton.addEventListener('click', function() {
+            // Simulate saving
+            const saveSpinner = document.createElement('span');
+            saveSpinner.className = 'spinner';
+            saveSpinner.style.display = 'inline-block';
+            saveSpinner.style.width = '16px';
+            saveSpinner.style.height = '16px';
+            saveSpinner.style.border = '2px solid rgba(255,255,255,0.3)';
+            saveSpinner.style.borderRadius = '50%';
+            saveSpinner.style.borderTopColor = '#fff';
+            saveSpinner.style.animation = 'spin 1s linear infinite';
+            saveSpinner.style.marginRight = '8px';
+            
+            const saveText = this.textContent;
+            this.textContent = '';
+            this.appendChild(saveSpinner);
+            this.appendChild(document.createTextNode(' Saving...'));
+            
+            // Add animation keyframes
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Show success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'alert alert-success';
+                successMessage.textContent = 'Settings saved successfully!';
+                successMessage.style.position = 'fixed';
+                successMessage.style.top = '20px';
+                successMessage.style.right = '20px';
+                successMessage.style.padding = '10px 20px';
+                successMessage.style.backgroundColor = '#4caf50';
+                successMessage.style.color = 'white';
+                successMessage.style.borderRadius = '4px';
+                successMessage.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+                successMessage.style.zIndex = '9999';
+                successMessage.style.opacity = '0';
+                successMessage.style.transition = 'opacity 0.3s ease';
+                
+                document.body.appendChild(successMessage);
+                
+                // Animate the message
+                setTimeout(() => {
+                    successMessage.style.opacity = '1';
+                }, 100);
+                
+                // Remove the message after a delay
+                setTimeout(() => {
+                    successMessage.style.opacity = '0';
+                    setTimeout(() => {
+                        document.body.removeChild(successMessage);
+                    }, 300);
+                }, 3000);
+                
+                // Reset the button
+                this.textContent = saveText;
+                resetChangesTracking();
+            }, 1000);
+        });
+    }
+    
+    // Add cancel functionality
+    if (cancelButton) {
+        cancelButton.addEventListener('click', function() {
+            // Reset all form fields to original values
+            const allInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"])');
+            allInputs.forEach(input => {
+                input.value = settingsState.originalValues[input.id] || '';
+            });
+            
+            const allTextareas = document.querySelectorAll('textarea');
+            allTextareas.forEach(textarea => {
+                textarea.value = settingsState.originalValues[textarea.id] || '';
+            });
+            
+            const allSelects = document.querySelectorAll('select');
+            allSelects.forEach(select => {
+                select.value = settingsState.originalValues[select.id] || '';
+                
+                // Re-apply theme and font size if they were changed
+                if (select.id === 'themeSelector') {
+                    applyTheme(select.value);
+                }
+                if (select.id === 'fontSizeSelector') {
+                    applyFontSize(select.value);
+                }
+            });
+            
+            const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+            allCheckboxes.forEach(checkbox => {
+                const originalValue = settingsState.originalValues[checkbox.id];
+                checkbox.checked = originalValue !== undefined ? originalValue : false;
+                
+                // Re-apply immediate visual changes
+                if (checkbox.closest('#display-settings')) {
+                    if (checkbox.closest('.setting-item:nth-child(3)')) {
+                        // High contrast mode
+                        applyHighContrastMode(checkbox.checked);
+                    }
+                    if (checkbox.closest('.setting-item:nth-child(4)')) {
+                        // Compact view
+                        applyCompactView(checkbox.checked);
+                    }
+                }
+            });
+            
+            resetChangesTracking();
+        });
+    }
+    
+    // =============================================
+    // EXPORT AND DELETE ACCOUNT FUNCTIONS
+    // =============================================
+    
+    // Get export and delete buttons
+    const exportDataBtn = document.querySelector('#data-export .btn-primary');
+    const deleteAccountBtn = document.querySelector('#account-deletion .btn-danger');
+    
+    // Add export functionality
+    if (exportDataBtn) {
+        exportDataBtn.addEventListener('click', function() {
+            // Show loading state
+            const originalText = this.textContent;
+            this.textContent = 'Processing...';
+            this.disabled = true;
+            
+            // Simulate processing
+            setTimeout(() => {
+                alert('Your data export has been processed. You will receive an email with download instructions shortly.');
+                this.textContent = originalText;
+                this.disabled = false;
+            }, 2000);
+        });
+    }
+    
+    // Add delete account functionality
+    if (deleteAccountBtn) {
+        deleteAccountBtn.addEventListener('click', function() {
+            const confirmed = confirm('WARNING: This action cannot be undone. Are you sure you want to delete your account and all associated data?');
+            
+            if (confirmed) {
+                const passwordConfirm = prompt('Please enter your password to confirm account deletion:');
+                
+                if (passwordConfirm) {
+                    // Show loading state
+                    const originalText = this.textContent;
+                    this.textContent = 'Processing...';
+                    this.disabled = true;
+                    
+                    // Simulate processing
+                    setTimeout(() => {
+                        alert('Your account has been scheduled for deletion. You will receive a confirmation email shortly.');
+                        this.textContent = originalText;
+                        this.disabled = false;
+                    }, 2000);
+                }
+            }
+        });
+    }
+    
+    // =============================================
+    // PAGE LOAD INITIALIZATION
+    // =============================================
+    
+    // Initialize all functionality
+    initializeFormTracking();
+    initializeDisplaySettings();
+    initializeLanguageSettings();
+    
+    // Set initial state of save button
+    resetChangesTracking();
+    
+    // Add beforeunload event to warn about unsaved changes
+    window.addEventListener('beforeunload', function(e) {
+        if (settingsState.hasUnsavedChanges) {
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
+        }
+    });
+});
+    </script>
+</body>
+</html>

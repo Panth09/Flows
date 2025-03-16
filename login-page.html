@@ -6,13 +6,14 @@
     <title>GSRTC Integrated Platform - Login</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
+            --primary-color: #1e3a8a;
+            --secondary-color: #2563eb;
+            --accent-color: #ef4444;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --background-gradient: linear-gradient(135deg, #2563eb, #1e3a8a);
         }
         
         * {
@@ -23,36 +24,91 @@
         }
         
         body {
-            background: linear-gradient(135deg, var(--light-color), #bdc3c7);
+            background: var(--background-gradient);
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-        
-        .login-container {
-            width: 400px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
             overflow: hidden;
         }
         
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M0 0L100 100M0 50L50 100M50 0L100 50" stroke="rgba(255,255,255,0.05)" stroke-width="1"/></svg>');
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+        
+        .login-container {
+            width: 420px;
+            max-width: 100%;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .login-header {
-            background-color: var(--primary-color);
+            background: var(--background-gradient);
             color: white;
-            padding: 25px;
+            padding: 30px;
             text-align: center;
+            position: relative;
         }
         
         .login-header h1 {
             font-size: 24px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
         
         .login-header p {
             font-size: 14px;
-            opacity: 0.8;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .login-header a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .login-header a:hover {
+            color: var(--light-color);
+        }
+        
+        .login-logo {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .login-logo img {
+            width: 70px;
+            height: 70px;
         }
         
         .login-form {
@@ -60,7 +116,8 @@
         }
         
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            position: relative;
         }
         
         .form-group label {
@@ -68,20 +125,36 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--dark-color);
+            font-size: 14px;
         }
         
         .form-group input {
             width: 100%;
-            padding: 12px;
+            padding: 14px 14px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: border 0.3s;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: #f8fafc;
         }
         
         .form-group input:focus {
             border-color: var(--secondary-color);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background-color: white;
+        }
+        
+        .form-group.focused label {
+            color: var(--secondary-color);
+        }
+        
+        .form-icon {
+            position: absolute;
+            left: 14px;
+            top: 46px;
+            color: #94a3b8;
+            font-size: 16px;
         }
         
         .login-actions {
@@ -97,32 +170,61 @@
         }
         
         .remember-me input {
-            margin-right: 5px;
+            margin-right: 8px;
+            accent-color: var(--secondary-color);
+            width: 16px;
+            height: 16px;
+        }
+        
+        .remember-me label {
+            font-size: 14px;
+            color: #64748b;
         }
         
         .forgot-password {
             color: var(--secondary-color);
             text-decoration: none;
             font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .forgot-password:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
         }
         
         .login-button {
             display: block;
             width: 100%;
-            padding: 12px;
-            margin-top: 25px;
+            padding: 14px;
+            margin-top: 30px;
             background-color: var(--secondary-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
         }
         
         .login-button:hover {
-            background-color: #2980b9;
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(37, 99, 235, 0.3);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .login-button:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .error-message {
@@ -131,29 +233,171 @@
             margin-top: 20px;
             text-align: center;
             display: none;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
         }
         
         .login-footer {
             text-align: center;
-            padding-bottom: 20px;
+            padding: 20px;
             font-size: 14px;
-            color: var(--dark-color);
+            color: #64748b;
+            border-top: 1px solid #f1f5f9;
         }
         
-        .login-logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
-            background-color: white;
-            border-radius: 50%;
+        #togglePassword {
+            position: absolute;
+            right: 12px;
+            top: 46px;
+            color: #64748b;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: all 0.3s;
+        }
+        
+        #togglePassword:hover {
+            color: var(--secondary-color);
+        }
+        
+        .test-credentials {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        .test-credentials h4 {
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+            font-size: 14px;
             display: flex;
-            justify-content: center;
             align-items: center;
         }
         
-        .login-logo img {
-            width: 60px;
-            height: 60px;
+        .test-credentials h4:before {
+            content: "🔑";
+            margin-right: 6px;
+        }
+        
+        .test-user {
+            padding: 3px 0;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .test-user:not(:last-child) {
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 3px;
+            margin-bottom: 3px;
+        }
+        
+        .test-user span {
+            color: #475569;
+            font-weight: 500;
+        }
+        
+        .login-button-wrapper {
+            position: relative;
+        }
+        
+        .login-button-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            z-index: 1;
+        }
+        
+        .login-button-progress.active {
+            display: flex;
+        }
+        
+        .login-button-progress svg {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .validation-message {
+            font-size: 12px;
+            margin-top: 5px;
+            padding-left: 2px;
+            color: var(--accent-color);
+            display: none;
+        }
+        
+        .validation-message.active {
+            display: block;
+        }
+        
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid white;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                width: 100%;
+                border-radius: 12px;
+            }
+            
+            .login-header {
+                padding: 20px;
+            }
+            
+            .login-logo {
+                width: 70px;
+                height: 70px;
+                margin-bottom: 15px;
+            }
+            
+            .login-logo img {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .login-form {
+                padding: 20px;
+            }
+            
+            .login-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .forgot-password {
+                align-self: flex-end;
+            }
         }
     </style>
 </head>
@@ -161,90 +405,312 @@
     <div class="login-container">
         <div class="login-header">
             <div class="login-logo">
-                <img src="/api/placeholder/60/60" alt="GSRTC Logo">
+                <img src="https://via.placeholder.com/30" alt="GSRTC Logo">
             </div>
             <h1>GSRTC Integrated Platform</h1>
-            <p>Enter your credentials to access the system</p>
+            <p>Welcome back! Please enter your credentials to access the system.</p>
         </div>
-        <div class="login-form">
+        <form class="login-form" id="loginForm">
             <div class="form-group">
                 <label for="username">Employee ID / Username</label>
-                <input type="text" id="username" placeholder="Enter your ID">
+                <input type="text" id="username" placeholder="Enter your ID" autocomplete="username" required>
+                <div class="validation-message" id="usernameValidation">Please enter a valid username</div>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password">
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
+                <button type="button" id="togglePassword">👁️</button>
+                <div class="validation-message" id="passwordValidation">Password is required</div>
             </div>
+
             <div class="login-actions">
                 <div class="remember-me">
                     <input type="checkbox" id="remember">
                     <label for="remember">Remember me</label>
                 </div>
-                <a href="#" class="forgot-password">Forgot Password?</a>
+                <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
             </div>
-            <button class="login-button" id="loginBtn">Login</button>
+            <div class="login-button-wrapper">
+                <button type="submit" class="login-button" id="loginBtn">Login</button>
+                <div class="login-button-progress" id="loginProgress">
+                    <span class="loader"></span>
+                </div>
+            </div>
             <div class="error-message" id="errorMessage">Invalid username or password. Please try again.</div>
-        </div>
+            
+            <!-- Test credentials section -->
+            <div class="test-credentials">
+                <h4>Test Credentials (Development Only)</h4>
+                <div id="testUsers"></div>
+            </div>
+        </form>
         <div class="login-footer">
             GSRTC Integrated Data Platform &copy; 2025
         </div>
     </div>
 
+    <!-- Include the mock backend script first -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const loginButton = document.getElementById('loginBtn');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const errorMessage = document.getElementById('errorMessage');
+        // Mock backend for testing - REMOVE IN PRODUCTION
+        if (!window.backendMockEnabled) {
+            window.backendMockEnabled = true;
             
-            // Demo credentials for testing
-            const validCredentials = [
-                { username: 'admin', password: 'admin123', role: 'admin' },
-                { username: 'maintenance', password: 'maint123', role: 'maintenance' },
-                { username: 'finance', password: 'finance123', role: 'finance' },
-                { username: 'traffic', password: 'traffic123', role: 'traffic' }
-            ];
+            // Create a mock user database - Making sure it's defined correctly
+// Complete the mockUserDB
+window.mockUserDB = [
+    {
+        id: 1,
+        username: 'admin',
+        password: 'password',
+        name: 'Admin User',
+        role: 'administrator',
+        department: 'IT'
+    },
+    {
+        id: 2,
+        username: 'user1',
+        password: 'password1',
+        name: 'John Doe',
+        role: 'standard',
+        department: 'Sales'
+    },
+    {
+        id: 3,
+        username: 'user2',
+        password: 'password2',
+        name: 'Jane Smith',
+        role: 'manager',
+        department: 'Marketing'
+    },
+    {
+        id: 4,
+        username: 'driver1',
+        password: 'busdriver',
+        name: 'Ramesh Patel',
+        role: 'driver',
+        department: 'Operations'
+    },
+    {
+        id: 5,
+        username: 'finance1',
+        password: 'moneytrack',
+        name: 'Priya Shah',
+        role: 'analyst',
+        department: 'Finance'
+    }
+];
+
+// Mock authentication function
+window.authenticate = function(username, password) {
+    // Convert parameters to strings for safer comparison
+    username = String(username);
+    password = String(password);
+    
+    return new Promise((resolve, reject) => {
+        // Simulate API delay
+        setTimeout(() => {
+            const user = window.mockUserDB.find(u => 
+                u.username.toLowerCase() === username.toLowerCase() && 
+                u.password === password
+            );
             
-            loginButton.addEventListener('click', () => {
-                const username = usernameInput.value.trim();
-                const password = passwordInput.value.trim();
-                
-                if (!username || !password) {
-                    errorMessage.textContent = 'Please enter both username and password.';
-                    errorMessage.style.display = 'block';
-                    return;
-                }
-                
-                // Check credentials
-                const user = validCredentials.find(cred => 
-                    cred.username === username && cred.password === password
-                );
-                
-                if (user) {
-                    // Store user info in session storage
-                    sessionStorage.setItem('gsrtcUser', JSON.stringify({
-                        username: user.username,
-                        role: user.role,
-                        loggedIn: true
-                    }));
-                    
-                    // Redirect to dashboard
-                    window.location.href = 'dashboard.html';
-                } else {
-                    errorMessage.textContent = 'Invalid username or password. Please try again.';
-                    errorMessage.style.display = 'block';
-                }
-            });
-            
-            // Clear error message when inputs change
-            usernameInput.addEventListener('input', () => {
-                errorMessage.style.display = 'none';
-            });
-            
-            passwordInput.addEventListener('input', () => {
-                errorMessage.style.display = 'none';
-            });
+            if (user) {
+                // Clone the user object and remove the password
+                const userInfo = {...user};
+                delete userInfo.password;
+                resolve({
+                    success: true,
+                    user: userInfo,
+                    token: 'mock-jwt-token-' + Date.now()
+                });
+            } else {
+                reject({
+                    success: false,
+                    message: 'Invalid username or password'
+                });
+            }
+        }, 800); // 800ms delay to simulate network
+    });
+};
+
+// Enhanced UI Script
+document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginProgress = document.getElementById('loginProgress');
+    const errorMessage = document.getElementById('errorMessage');
+    const usernameValidation = document.getElementById('usernameValidation');
+    const passwordValidation = document.getElementById('passwordValidation');
+    const testUsersContainer = document.getElementById('testUsers');
+    const rememberCheckbox = document.getElementById('remember');
+    
+    // Enhanced form focus effects
+    const formGroups = document.querySelectorAll('.form-group');
+    formGroups.forEach(group => {
+        const input = group.querySelector('input');
+        input.addEventListener('focus', () => {
+            group.classList.add('focused');
         });
-    </script>
+        input.addEventListener('blur', () => {
+            if (!input.value) {
+                group.classList.remove('focused');
+            }
+        });
+        // Check if the input has value on page load (e.g., autofill)
+        if (input.value) {
+            group.classList.add('focused');
+        }
+    });
+    
+    // Remember user functionality
+    function loadSavedCredentials() {
+        const savedUsername = localStorage.getItem('gsrtc_username');
+        if (savedUsername) {
+            usernameInput.value = savedUsername;
+            rememberCheckbox.checked = true;
+            // Add focused class to username input group
+            usernameInput.closest('.form-group').classList.add('focused');
+        }
+    }
+    
+    // Toggle password visibility
+    togglePasswordBtn.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🔒';
+    });
+    
+    // Display mock users in the test credentials section
+    function displayTestUsers() {
+        testUsersContainer.innerHTML = '';
+        window.mockUserDB.forEach(user => {
+            const userElement = document.createElement('div');
+            userElement.className = 'test-user';
+            userElement.innerHTML = `
+                <div>${user.username} (${user.role})</div>
+                <span>${user.password}</span>
+            `;
+            userElement.addEventListener('click', () => {
+                usernameInput.value = user.username;
+                passwordInput.value = user.password;
+                // Add focused class to both input groups
+                usernameInput.closest('.form-group').classList.add('focused');
+                passwordInput.closest('.form-group').classList.add('focused');
+            });
+            testUsersContainer.appendChild(userElement);
+        });
+    }
+    
+    // Validate form fields
+    function validateForm() {
+        let isValid = true;
+        
+        if (!usernameInput.value.trim()) {
+            usernameValidation.textContent = 'Employee ID is required';
+            usernameValidation.classList.add('active');
+            isValid = false;
+        } else {
+            usernameValidation.classList.remove('active');
+        }
+        
+        if (!passwordInput.value) {
+            passwordValidation.textContent = 'Password is required';
+            passwordValidation.classList.add('active');
+            isValid = false;
+        } else if (passwordInput.value.length < 6) {
+            passwordValidation.textContent = 'Password must be at least 6 characters';
+            passwordValidation.classList.add('active');
+            isValid = false;
+        } else {
+            passwordValidation.classList.remove('active');
+        }
+        
+        return isValid;
+    }
+    
+    // Handle form submission
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Clear previous error
+        errorMessage.style.display = 'none';
+        
+        // Validate form fields
+        if (!validateForm()) {
+            return;
+        }
+        
+        // Show loading state
+        loginBtn.disabled = true;
+        loginProgress.classList.add('active');
+        
+        // Get input values
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        
+        // Save username if remember checkbox is checked
+        if (rememberCheckbox.checked) {
+            localStorage.setItem('gsrtc_username', username);
+        } else {
+            localStorage.removeItem('gsrtc_username');
+        }
+        
+        // Call the mock authentication function
+        window.authenticate(username, password)
+            .then(response => {
+                // Success - store user info in session storage
+                sessionStorage.setItem('currentUser', JSON.stringify(response.user));
+                sessionStorage.setItem('authToken', response.token);
+                
+                // Redirect to dashboard (add animation)
+                loginForm.classList.add('success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 800);
+            })
+            .catch(error => {
+                // Show error message
+                errorMessage.textContent = error.message || 'Authentication failed. Please try again.';
+                errorMessage.style.display = 'block';
+                
+                // Add animation to inputs
+                usernameInput.classList.add('error-shake');
+                passwordInput.classList.add('error-shake');
+                setTimeout(() => {
+                    usernameInput.classList.remove('error-shake');
+                    passwordInput.classList.remove('error-shake');
+                }, 500);
+            })
+            .finally(() => {
+                // Reset loading state
+                loginBtn.disabled = false;
+                loginProgress.classList.remove('active');
+            });
+    });
+    
+    // Input event listeners for real-time validation
+    usernameInput.addEventListener('input', function() {
+        if (this.value.trim()) {
+            usernameValidation.classList.remove('active');
+        }
+    });
+    
+    passwordInput.addEventListener('input', function() {
+        if (this.value.length >= 6) {
+            passwordValidation.classList.remove('active');
+        }
+    });
+    
+    // Initialize
+    loadSavedCredentials();
+    displayTestUsers();
+});
+        }
+</script>
 </body>
 </html>
+   

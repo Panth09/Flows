@@ -406,14 +406,17 @@
             <nav class="navbar">
                 <div class="logo">GSRTC</div>
                 <ul class="nav-links">
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Available Buses</a></li>
-                    <li><a href="#">Emergency</a></li>
-                    <li><a href="#">Finance</a></li>
-                    <li><a href="#">Workshop</a></li>
-                    <li class="notification-bell">
-                        <a href="#">Notifications</a>
-                        <span class="notification-count">3</span>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="available-buses-page.html">Available Buses</a></li>
+                    <li><a href="maintenance-page.html">Maintenance</a></li>
+                    <li><a href="accounting.html">Accounting</a></li>
+                    <li><a href="workshop.html">Workshop</a></li>
+                    <li><a href="stores.html">Stores</a></li>
+                    <li><a href="purchase.html">Purchase</a></li>
+                    <li><a href="traffic.html">Traffic</a></li>
+                    <li class="menu-item" id="logoutBtn">
+                        <span class="menu-icon">🚪</span>
+                        <span>Logout</span>
                     </li>
                 </ul>
             </nav>
@@ -470,4 +473,41 @@
             
             <div class="tab-container">
                 <div class="tab-header">
-                    <button class="tab-btn active" onclick
+                    <button class="tab-btn active" onclick="showAllIncidents()">All Incidents</button>
+                    <button class="tab-btn" onclick="showResolvedIncidents()">Resolved</button>
+                    <button class="tab-btn" onclick="showPendingIncidents()">Pending</button>
+                </div>
+                <div class="tab-content active">
+                    <table class="emergency-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Emergency incidents will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function() {
+                // Clear any stored session data (like tokens or user info)
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("gsrtcUser");
+                sessionStorage.removeItem("authToken");
+                sessionStorage.removeItem("gsrtcUser");
+                window.location.href = "login-page.html";
+            });
+        }
+    </script>
+</body>
+</html>
